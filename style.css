@@ -35,3 +35,31 @@ body {
 .hidden {
   display: none;
 }
+
+.user-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: #ff7e67;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px black solid;
+}
+
+.user-card p::after {
+  content: "|";
+  margin: 0 10px;
+}
+
+.user-card p:last-child::after {
+  content: "";
+}
+
+.user-card button {
+  background-color: #347474;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+}

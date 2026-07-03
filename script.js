@@ -28,20 +28,56 @@ startButtons.forEach((button) => {
   button.addEventListener("click", showPanel);
 });
 
-const admin = function (user) {
-  console.log(user);
+const admin = function () {
+  const listUser = document.getElementById("user-list");
+
+  users.forEach((user) => {
+    if (user.grades === undefined) {
+      user.grades = "Brak";
+    }
+
+    const divuser = document.createElement("div");
+    divuser.classList.add("user-card");
+
+    const pId = document.createElement("p");
+    pId.textContent = `ID: ${user.id}`;
+
+    const pName = document.createElement("p");
+    pName.textContent = `Imię: ${user.name}`;
+
+    const pRole = document.createElement("p");
+    pRole.textContent = `Rola: ${user.role}`;
+
+    const pGrades = document.createElement("p");
+    pGrades.textContent = `Oceny: ${user.grades}`;
+
+    const edit = document.createElement("button");
+    edit.innerHTML = "edit";
+
+    const remove = document.createElement("button");
+    remove.innerHTML = "remove";
+
+    divuser.appendChild(pId);
+    divuser.appendChild(pName);
+    divuser.appendChild(pRole);
+    divuser.appendChild(pGrades);
+    divuser.appendChild(edit);
+    divuser.appendChild(remove);
+
+    listUser.appendChild(divuser);
+  });
 };
 
-const teacher = function (user) {
-  console.log(user);
+const teacher = function () {
+  console.log("teacher");
 };
 
-const student = function (user) {
-  console.log(user);
+const student = function () {
+  console.log("student");
 };
 
-const guest = function (user) {
-  console.log(user);
+const guest = function () {
+  console.log("guest");
 };
 
 const roleRegistry = {
