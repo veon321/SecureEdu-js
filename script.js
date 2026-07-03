@@ -7,6 +7,7 @@ const users = [
 
 const startButtons = document.querySelectorAll(".user");
 const menuContainer = document.getElementById("menu-container");
+const optionRole = document.getElementById("option-role");
 
 const showPanel = function (event) {
   const user = event.target.classList[1];
@@ -30,11 +31,12 @@ startButtons.forEach((button) => {
 
 const admin = function () {
   const listUser = document.getElementById("user-list");
+  listUser.innerHTML = "";
 
   users.forEach((user) => {
-    if (user.grades === undefined) {
-      user.grades = "Brak";
-    }
+    const gradesDisplay = Array.isArray(user.grades)
+      ? user.grades.join(", ")
+      : "Brak";
 
     const divuser = document.createElement("div");
     divuser.classList.add("user-card");
@@ -49,7 +51,7 @@ const admin = function () {
     pRole.textContent = `Rola: ${user.role}`;
 
     const pGrades = document.createElement("p");
-    pGrades.textContent = `Oceny: ${user.grades}`;
+    pGrades.textContent = `Oceny: ${gradesDisplay}`;
 
     const edit = document.createElement("button");
     edit.innerHTML = "edit";
@@ -66,7 +68,41 @@ const admin = function () {
 
     listUser.appendChild(divuser);
   });
+
+  const optionList = document.getElementById("user-role");
+  optionList.innerHTML = "";
+
+  const uniqueRoles = [...new Set(users.map((user) => user.role))];
+
+  uniqueRoles.forEach((role) => {
+    const option = document.createElement("option");
+    option.value = role;
+    option.textContent = role;
+    optionList.appendChild(option);
+  });
 };
+
+const addUserButton = document.getElementById("addUser-button");
+
+const addUser = function () {
+  const usernameInput = document.getElementById("name");
+  const username = usernameInput.value.trim(); //
+  const role = document.getElementById("user-role").value;
+
+  const newId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
+
+  if (username === "") {
+    alert("Wprowadź nazwę użytkownika!");
+    return;
+  }
+
+  users.push({ id: newId, name: username, role: role, grades: [] });
+
+  usernameInput.value = "";
+
+  admin();
+};
+addUserButton.addEventListener("click", addUser);
 
 const teacher = function () {
   console.log("teacher");
