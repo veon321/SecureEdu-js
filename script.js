@@ -9,7 +9,7 @@ const startButtons = document.querySelectorAll(".user");
 const menuContainer = document.getElementById("menu-container");
 
 const showPanel = function (event) {
-  const user = event.target.classList[1]; // np. "admin"
+  const user = event.target.classList[1];
   const panel = document.querySelector(`.panel.${user}`);
 
   panel.classList.remove("hidden");
