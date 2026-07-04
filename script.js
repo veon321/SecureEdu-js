@@ -91,7 +91,6 @@ const addUser = function () {
 
   users.push({ id: newId, name: username, role, grades: [] });
   usernameInput.value = "";
-
   admin();
 };
 
