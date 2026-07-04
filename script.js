@@ -91,6 +91,7 @@ const addUser = function () {
 
   users.push({ id: newId, name: username, role, grades: [] });
   usernameInput.value = "";
+
   admin();
 };
 
@@ -103,6 +104,7 @@ const removeUser = function (event) {
   if (userIndex !== -1) {
     users.splice(userIndex, 1);
   }
+
   admin();
 };
 
