@@ -104,7 +104,6 @@ const removeUser = function (event) {
   if (userIndex !== -1) {
     users.splice(userIndex, 1);
   }
-
   admin();
 };
 
