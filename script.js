@@ -5,6 +5,13 @@ const users = [
   { id: 4, name: "Marta Żak", role: "guest" },
 ];
 
+const roles = [
+  { role: "admin" },
+  { role: "teacher" },
+  { role: "student" },
+  { role: "guest" },
+];
+
 const admin = () => {
   const listUser = document.getElementById("user-list");
   listUser.innerHTML = "";
@@ -24,19 +31,24 @@ const admin = () => {
       <button class="remove-btn">remove</button>
     `;
 
+    divuser.dataset.id = `${id}`;
     listUser.appendChild(divuser);
   });
 
   const optionList = document.getElementById("user-role");
   optionList.innerHTML = "";
-  const uniqueRoles = [...new Set(users.map((u) => u.role))];
 
-  uniqueRoles.forEach((role) => {
+  roles.forEach(({ role }) => {
     const option = document.createElement("option");
     option.value = role;
     option.textContent = role;
     optionList.appendChild(option);
   });
+
+  const removeButtons = document.querySelectorAll(".remove-btn");
+  removeButtons.forEach((button) =>
+    button.addEventListener("click", removeUser),
+  );
 };
 
 const teacher = () => console.log("teacher");
@@ -79,6 +91,19 @@ const addUser = function () {
 
   users.push({ id: newId, name: username, role, grades: [] });
   usernameInput.value = "";
+
+  admin();
+};
+
+const removeUser = function (event) {
+  const parent = event.target.parentElement;
+  const id = Number(parent.dataset.id);
+
+  const userIndex = users.findIndex((user) => user.id === id);
+
+  if (userIndex !== -1) {
+    users.splice(userIndex, 1);
+  }
 
   admin();
 };
