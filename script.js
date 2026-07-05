@@ -137,6 +137,8 @@ const editUser = function (event) {
 
       <label>Rola: <select class="role-edit" id="role-edit"></select></label>
 
+      <button type="button" id="edit-apply" class="edit-apply">Apply</button>
+
   `;
 
   parent.appendChild(editDiv);
@@ -148,6 +150,24 @@ const editUser = function (event) {
     option.value = role;
     option.textContent = role;
     optionList.appendChild(option);
+  });
+
+  const applyButton = document.getElementById("edit-apply");
+
+  applyButton.addEventListener("click", () => {
+    const newName = document.getElementById("name-edit").value;
+    const gradeInput = document.getElementById("grade-edit");
+    const newGrade = parseInt(gradeInput.value);
+    const newRole = document.getElementById("role-edit").value;
+
+    const parent = event.target.closest(".user-card");
+    const userIndex = users.findIndex(
+      (user) => user.id === Number(parent.dataset.id),
+    );
+    users[userIndex].name = newName;
+    users[userIndex].role = newRole;
+    users[userIndex].grades = newGrade;
+    admin();
   });
 };
 
