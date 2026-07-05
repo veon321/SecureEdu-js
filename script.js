@@ -125,10 +125,14 @@ const editUser = function (event) {
   const editDiv = document.createElement("div");
   editDiv.classList.add("edit-div");
 
+  const userIndex = users.findIndex(
+    (user) => user.id === Number(parent.dataset.id),
+  );
+
   editDiv.innerHTML = `
   Panel edycji
       <label
-        >Nazwa użytkownika: <input type="text" class="name-edit" id="name-edit" />
+        >Nazwa użytkownika: <input type="text" class="name-edit" id="name-edit" value="${users[userIndex].name}"/>
       </label>
 
       <label
@@ -138,6 +142,7 @@ const editUser = function (event) {
       <label>Rola: <select class="role-edit" id="role-edit"></select></label>
 
       <button type="button" id="edit-apply" class="edit-apply">Apply</button>
+      <p class="error hidden" id="error"></p>
 
   `;
 
@@ -155,6 +160,14 @@ const editUser = function (event) {
   const applyButton = document.getElementById("edit-apply");
 
   applyButton.addEventListener("click", () => {
+    const name = document.getElementById("name-edit");
+    if (name.value == "") {
+      const error = document.getElementById("error");
+      error.innerHTML = "Wprowadź wszystkie wartości!";
+      error.classList.remove("hidden");
+      return;
+    }
+
     const newName = document.getElementById("name-edit").value;
     const gradeInput = document.getElementById("grade-edit");
     const newGrade = parseInt(gradeInput.value);
