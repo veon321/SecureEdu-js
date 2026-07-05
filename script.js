@@ -21,17 +21,19 @@ const admin = () => {
 
     const divuser = document.createElement("div");
     divuser.classList.add("user-card");
+    divuser.dataset.id = `${id}`;
 
     divuser.innerHTML = `
-      <p>ID: ${id}</p>
-      <p>Imię: ${name}</p>
-      <p>Rola: ${role}</p>
-      <p>Oceny: ${gradesDisplay}</p>
-      <button class="edit-btn">edit</button>
-      <button class="remove-btn">remove</button>
+      <div class="user-info">
+        <p>ID: ${id}</p>
+        <p>Imię: ${name}</p>
+        <p>Rola: ${role}</p>
+        <p>Oceny: ${gradesDisplay}</p>
+        <button class="edit-btn">edit</button>
+        <button class="remove-btn">remove</button>
+      </div>
     `;
 
-    divuser.dataset.id = `${id}`;
     listUser.appendChild(divuser);
   });
 
@@ -49,6 +51,11 @@ const admin = () => {
   removeButtons.forEach((button) =>
     button.addEventListener("click", removeUser),
   );
+
+  const editButtons = document.querySelectorAll(".edit-btn");
+  editButtons.forEach((button) => {
+    button.addEventListener("click", editUser);
+  });
 };
 
 const teacher = () => console.log("teacher");
@@ -96,7 +103,7 @@ const addUser = function () {
 };
 
 const removeUser = function (event) {
-  const parent = event.target.parentElement;
+  const parent = event.target.closest(".user-card");
   const id = Number(parent.dataset.id);
 
   const userIndex = users.findIndex((user) => user.id === id);
@@ -108,5 +115,44 @@ const removeUser = function (event) {
   admin();
 };
 
-startButtons.forEach((button) => button.addEventListener("click", showPanel));
+const editUser = function (event) {
+  const parent = event.target.closest(".user-card");
+  const divEdit = parent ? parent.querySelector(".edit-div") : null;
+  if (divEdit) {
+    divEdit.remove();
+    return;
+  }
+  const editDiv = document.createElement("div");
+  editDiv.classList.add("edit-div");
+
+  editDiv.innerHTML = `
+  Panel edycji
+      <label
+        >Nazwa użytkownika: <input type="text" class="name-edit" id="name-edit" />
+      </label>
+
+      <label
+        >Oceny: <input type="number" class="grade-edit" id="grade-edit" />
+      </label>
+
+      <label>Rola: <select class="role-edit" id="role-edit"></select></label>
+
+  `;
+
+  parent.appendChild(editDiv);
+
+  const optionList = document.getElementById("role-edit");
+
+  roles.forEach(({ role }) => {
+    const option = document.createElement("option");
+    option.value = role;
+    option.textContent = role;
+    optionList.appendChild(option);
+  });
+};
+
+startButtons.forEach((button) => {
+  button.addEventListener("click", showPanel);
+});
+
 addUserButton.addEventListener("click", addUser);

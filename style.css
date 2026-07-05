@@ -38,14 +38,21 @@ body {
 
 .user-card {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  flex-direction: column;
   gap: 10px;
   background-color: #ff7e67;
   margin-top: 10px;
   padding: 10px;
   border-radius: 10px;
   border: 1px black solid;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .user-card p::after {
@@ -94,4 +101,11 @@ body {
 
 .addUser-button:hover {
   background-color: #35495e;
+}
+
+.edit-div {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 5px;
 }
