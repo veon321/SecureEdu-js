@@ -5,47 +5,50 @@ const users = [
   { id: 4, name: "Marta Żak", role: "guest" },
 ];
 
-const roles = [
-  { role: "admin" },
-  { role: "teacher" },
-  { role: "student" },
-  { role: "guest" },
-];
+const roles = ["admin", "teacher", "student", "guest"];
+
+const populateRoleOptions = (selectEl, selectedRole = null) => {
+  selectEl.replaceChildren();
+  roles.forEach((role) => {
+    const option = document.createElement("option");
+    option.value = role;
+    option.textContent = role;
+    if (role === selectedRole) option.selected = true;
+    selectEl.appendChild(option);
+  });
+};
 
 const admin = () => {
   const listUser = document.getElementById("user-list");
-  listUser.innerHTML = "";
+  listUser.replaceChildren();
 
   users.forEach(({ id, name, role, grades }) => {
     const gradesDisplay = Array.isArray(grades) ? grades.join(", ") : "Brak";
 
-    const divuser = document.createElement("div");
-    divuser.classList.add("user-card");
-    divuser.dataset.id = `${id}`;
+    const divUser = document.createElement("div");
+    divUser.classList.add("user-card");
+    divUser.dataset.id = `${id}`;
 
-    divuser.innerHTML = `
+    divUser.setHTMLUnsafe(`
       <div class="user-info">
-        <p>ID: ${id}</p>
-        <p>Imię: ${name}</p>
-        <p>Rola: ${role}</p>
-        <p>Oceny: ${gradesDisplay}</p>
+        <p class="u-id"></p>
+        <p class="u-name"></p>
+        <p class="u-role"></p>
+        <p class="u-grades"></p>
         <button class="edit-btn">edit</button>
         <button class="remove-btn">remove</button>
       </div>
-    `;
+    `);
 
-    listUser.appendChild(divuser);
+    divUser.querySelector(".u-id").textContent = `ID: ${id}`;
+    divUser.querySelector(".u-name").textContent = `Imię: ${name}`;
+    divUser.querySelector(".u-role").textContent = `Rola: ${role}`;
+    divUser.querySelector(".u-grades").textContent = `Oceny: ${gradesDisplay}`;
+
+    listUser.appendChild(divUser);
   });
 
-  const optionList = document.getElementById("user-role");
-  optionList.innerHTML = "";
-
-  roles.forEach(({ role }) => {
-    const option = document.createElement("option");
-    option.value = role;
-    option.textContent = role;
-    optionList.appendChild(option);
-  });
+  populateRoleOptions(document.getElementById("user-role"));
 
   const removeButtons = document.querySelectorAll(".remove-btn");
   removeButtons.forEach((button) =>
@@ -118,10 +121,12 @@ const removeUser = function (event) {
 const editUser = function (event) {
   const parent = event.target.closest(".user-card");
   const divEdit = parent ? parent.querySelector(".edit-div") : null;
+
   if (divEdit) {
     divEdit.remove();
     return;
   }
+
   const editDiv = document.createElement("div");
   editDiv.classList.add("edit-div");
 
@@ -129,57 +134,61 @@ const editUser = function (event) {
     (user) => user.id === Number(parent.dataset.id),
   );
 
-  editDiv.innerHTML = `
-  Panel edycji
-      <label
-        >Nazwa użytkownika: <input type="text" class="name-edit" id="name-edit" value="${users[userIndex].name}"/>
-      </label>
-
-      <label
-        >Oceny: <input type="number" class="grade-edit" id="grade-edit" />
-      </label>
-
-      <label>Rola: <select class="role-edit" id="role-edit"></select></label>
-
-      <button type="button" id="edit-apply" class="edit-apply">Apply</button>
-      <p class="error hidden" id="error"></p>
-
-  `;
+  editDiv.setHTMLUnsafe(`
+    Panel edycji
+    <label>Nazwa użytkownika: <input type="text" class="name-edit" id="name-edit" value="" /></label>
+    <label>Oceny: <input type="text" class="grade-edit" id="grade-edit" value="" /></label>
+    <label>Rola: <select class="role-edit" id="role-edit"></select></label>
+    <button type="button" id="edit-apply" class="edit-apply">Apply</button>
+    <p class="error hidden" id="error"></p>
+  `);
 
   parent.appendChild(editDiv);
 
-  const optionList = document.getElementById("role-edit");
+  const nameInput = editDiv.querySelector("#name-edit");
+  nameInput.value = users[userIndex].name;
 
-  roles.forEach(({ role }) => {
-    const option = document.createElement("option");
-    option.value = role;
-    option.textContent = role;
-    optionList.appendChild(option);
+  const gradeInput = editDiv.querySelector("#grade-edit");
+  const currentGrades = users[userIndex].grades;
+  gradeInput.value = Array.isArray(currentGrades)
+    ? currentGrades.join(" ")
+    : "";
+
+  gradeInput.addEventListener("input", (e) => {
+    let digits = e.target.value.replace(/[^1-6]/g, "");
+    e.target.value = digits.split("").join(" ");
   });
 
-  const applyButton = document.getElementById("edit-apply");
+  populateRoleOptions(
+    editDiv.querySelector("#role-edit"),
+    users[userIndex].role,
+  );
+
+  const applyButton = editDiv.querySelector("#edit-apply");
 
   applyButton.addEventListener("click", () => {
-    const name = document.getElementById("name-edit");
-    if (name.value == "") {
-      const error = document.getElementById("error");
-      error.innerHTML = "Wprowadź wszystkie wartości!";
+    const nameField = editDiv.querySelector("#name-edit");
+
+    if (nameField.value.trim() === "") {
+      const error = editDiv.querySelector("#error");
+      error.textContent = "Wprowadź wszystkie wartości!";
       error.classList.remove("hidden");
       return;
     }
 
-    const newName = document.getElementById("name-edit").value;
-    const gradeInput = document.getElementById("grade-edit");
-    const newGrade = parseInt(gradeInput.value);
-    const newRole = document.getElementById("role-edit").value;
+    const newName = nameField.value;
+    const newRole = editDiv.querySelector("#role-edit").value;
 
-    const parent = event.target.closest(".user-card");
-    const userIndex = users.findIndex(
-      (user) => user.id === Number(parent.dataset.id),
-    );
+    const gradesRaw = gradeInput.value.trim();
+    const newGradesArray =
+      gradesRaw === ""
+        ? []
+        : gradesRaw.split(" ").map((num) => parseInt(num, 10));
+
     users[userIndex].name = newName;
     users[userIndex].role = newRole;
-    users[userIndex].grades = newGrade;
+    users[userIndex].grades = newGradesArray;
+
     admin();
   });
 };
