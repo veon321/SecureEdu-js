@@ -62,7 +62,29 @@ const admin = () => {
   });
 };
 
-const teacher = () => console.log("teacher");
+const teacher = () => {
+  const uczniowie = users.filter((user) => {
+    return user.role == "student";
+  });
+  const uczniowieDiv = document.getElementById("uczniowie");
+  const panelTeacher = document.getElementById("teacher-panel");
+
+  panelTeacher.classList.remove("hidden");
+
+  uczniowieDiv.innerHTML = uczniowie
+    .map(
+      (uczen) => `
+    <p>
+      ID: ${uczen.id}<br>
+      Imię: ${uczen.name}<br>
+      Wiek: ${uczen.age}<br>
+      Rola: ${uczen.role}
+    </p>
+  `,
+    )
+    .join("");
+};
+
 const student = () => console.log("student");
 const guest = () => console.log("guest");
 
