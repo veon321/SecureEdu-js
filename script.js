@@ -23,7 +23,8 @@ const admin = () => {
   listUser.replaceChildren();
 
   users.forEach(({ id, name, role, grades }) => {
-    const gradesDisplay = Array.isArray(grades) ? grades.join(", ") : "Brak";
+    const gradesDisplay =
+      Array.isArray(grades) && grades.length > 0 ? grades.join(", ") : "Brak";
 
     const divUser = document.createElement("div");
     divUser.classList.add("user-card");
