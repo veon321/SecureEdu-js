@@ -32,10 +32,6 @@ body {
   background-color: #35495e;
 }
 
-.hidden {
-  display: none;
-}
-
 .user-card {
   display: flex;
   align-items: center;
@@ -85,6 +81,7 @@ body {
   background-color: #ff7e67;
   padding: 20px;
   border-radius: 10px;
+  width: 100%;
 }
 
 .select-role {
@@ -143,4 +140,27 @@ body {
   justify-content: center;
   align-items: center;
   gap: 30px;
+}
+
+#admin-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#teacher-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.powrot {
+  width: 50%;
+  height: 28px;
+}
+
+.hidden {
+  display: none !important;
 }

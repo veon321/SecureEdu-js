@@ -250,3 +250,18 @@ startButtons.forEach((button) => {
 });
 
 addUserButton.addEventListener("click", addUser);
+
+const powrotButton = document.querySelectorAll(".powrot");
+
+const glowna = () => {
+  const panele = document.querySelectorAll(".panel");
+  panele.forEach((panel) => {
+    panel.classList.add("hidden");
+  });
+  const menuContainer = document.getElementById("menu-container");
+  menuContainer.classList.remove("hidden");
+};
+
+powrotButton.forEach((powrot) => {
+  powrot.addEventListener("click", glowna);
+});
