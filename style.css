@@ -109,3 +109,38 @@ body {
   text-align: center;
   gap: 5px;
 }
+
+.uczniowieDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.uczen {
+  display: flex;
+  flex-direction: row;
+  font-size: 24px;
+  background-color: #ff7e67;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.dodajOcene {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff7e67;
+  padding: 20px;
+  border-radius: 10px;
+  gap: 20px;
+  width: 100%;
+}
+
+.uczniowiePanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}

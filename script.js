@@ -3,6 +3,7 @@ const users = [
   { id: 2, name: "Anna Nowak", role: "teacher" },
   { id: 3, name: "Piotr Gryz", role: "student", grades: [3, 4, 5] },
   { id: 4, name: "Marta Żak", role: "guest" },
+  { id: 5, name: "test", role: "student", grades: [3, 4, 5] },
 ];
 
 const roles = ["admin", "teacher", "student", "guest"];
@@ -63,26 +64,23 @@ const admin = () => {
 };
 
 const teacher = () => {
-  const uczniowie = users.filter((user) => {
-    return user.role == "student";
-  });
+  const uczniowie = users.filter((user) => user.role === "student");
+
   const uczniowieDiv = document.getElementById("uczniowie");
   const panelTeacher = document.getElementById("teacher-panel");
 
+  uczniowieDiv.classList.add("uczniowieDiv");
   panelTeacher.classList.remove("hidden");
 
-  uczniowieDiv.innerHTML = uczniowie
-    .map(
-      (uczen) => `
-    <p>
-      ID: ${uczen.id}<br>
-      Imię: ${uczen.name}<br>
-      Wiek: ${uczen.age}<br>
-      Rola: ${uczen.role}
-    </p>
-  `,
-    )
-    .join("");
+  uczniowie.forEach((uczen) => {
+    const uczenDiv = document.createElement("div");
+    uczenDiv.classList.add("uczen");
+
+    uczenDiv.innerHTML = `
+    ID: ${uczen.id} | Imię: ${uczen.name} | Rola: ${uczen.role} | Oceny: ${uczen.grades}
+  `;
+    uczniowieDiv.appendChild(uczenDiv);
+  });
 };
 
 const student = () => console.log("student");
