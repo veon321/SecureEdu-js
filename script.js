@@ -68,6 +68,11 @@ const teacher = () => {
 
   const uczniowieDiv = document.getElementById("uczniowie");
   const panelTeacher = document.getElementById("teacher-panel");
+  const wyborUcznia = document.getElementById("uczenSelect");
+  const wyborOceny = document.getElementById("ocena");
+
+  uczniowieDiv.innerHTML = "";
+  wyborUcznia.innerHTML = "";
 
   uczniowieDiv.classList.add("uczniowieDiv");
   panelTeacher.classList.remove("hidden");
@@ -75,30 +80,39 @@ const teacher = () => {
   uczniowie.forEach((uczen) => {
     const uczenDiv = document.createElement("div");
     uczenDiv.classList.add("uczen");
-
     uczenDiv.innerHTML = `
-    ID: ${uczen.id} | Imię: ${uczen.name} | Rola: ${uczen.role} | Oceny: ${uczen.grades}
-  `;
+      ID: ${uczen.id} | Imię: ${uczen.name} | Rola: ${uczen.role} | Oceny: ${uczen.grades}
+    `;
     uczniowieDiv.appendChild(uczenDiv);
-  });
 
-  users.forEach((user) => {
-    if (user.role === "student") {
-      const wyborUcznia = document.getElementById("uczenSelect");
-      const opcja = document.createElement("option");
-      opcja.text = user.name;
-      wyborUcznia.appendChild(opcja);
-    }
-  });
-
-  const ocenyDoWyboru = [1, 2, 3, 4, 5, 6];
-  ocenyDoWyboru.forEach((ocena) => {
-    const wyborOceny = document.getElementById("ocena");
     const opcja = document.createElement("option");
-    opcja.text = ocena;
-    wyborOceny.appendChild(opcja);
+    opcja.text = uczen.name;
+    wyborUcznia.appendChild(opcja);
   });
+
+  if (wyborOceny.options.length === 0) {
+    const ocenyDoWyboru = [1, 2, 3, 4, 5, 6];
+    ocenyDoWyboru.forEach((ocena) => {
+      const opcja = document.createElement("option");
+      opcja.text = ocena;
+      wyborOceny.appendChild(opcja);
+    });
+  }
 };
+
+const buttonDodajOcene = document.getElementById("dodaj");
+
+buttonDodajOcene.addEventListener("click", () => {
+  const wyborOceny = document.getElementById("ocena");
+  const wyborUcznia = document.getElementById("uczenSelect");
+  const wybranaOpcja = wyborUcznia.options[wyborUcznia.selectedIndex].text;
+
+  const user = users.find((u) => u.name === wybranaOpcja);
+  if (user && wyborOceny.value) {
+    user.grades.push(wyborOceny.value);
+    teacher();
+  }
+});
 
 const student = () => console.log("student");
 const guest = () => console.log("guest");
