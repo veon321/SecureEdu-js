@@ -81,6 +81,23 @@ const teacher = () => {
   `;
     uczniowieDiv.appendChild(uczenDiv);
   });
+
+  users.forEach((user) => {
+    if (user.role === "student") {
+      const wyborUcznia = document.getElementById("uczenSelect");
+      const opcja = document.createElement("option");
+      opcja.text = user.name;
+      wyborUcznia.appendChild(opcja);
+    }
+  });
+
+  const ocenyDoWyboru = [1, 2, 3, 4, 5, 6];
+  ocenyDoWyboru.forEach((ocena) => {
+    const wyborOceny = document.getElementById("ocena");
+    const opcja = document.createElement("option");
+    opcja.text = ocena;
+    wyborOceny.appendChild(opcja);
+  });
 };
 
 const student = () => console.log("student");
