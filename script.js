@@ -114,7 +114,16 @@ buttonDodajOcene.addEventListener("click", () => {
   }
 });
 
-const student = () => console.log("student");
+const student = () => {
+  const studenci = users.filter((user) => {
+    return user.role === "student";
+  });
+
+  studenci.forEach(({ id, name, role, grades }) => {
+    console.log(id, name, role, grades);
+  });
+};
+
 const guest = () => console.log("guest");
 
 const roleRegistry = { admin, teacher, student, guest };
