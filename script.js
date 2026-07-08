@@ -115,12 +115,27 @@ buttonDodajOcene.addEventListener("click", () => {
 });
 
 const student = () => {
-  const studenci = users.filter((user) => {
-    return user.role === "student";
-  });
+  const students = document.getElementById("students");
+  const studenci = users.filter((user) => user.role === "student");
 
   studenci.forEach(({ id, name, role, grades }) => {
-    console.log(id, name, role, grades);
+    const studentEl = document.createElement("div");
+    studentEl.innerHTML = `
+      <div class="student-info">
+        <p class="s-id"></p>
+        <p class="s-name"></p>
+        <p class="s-role"></p>
+        <p class="s-grades"></p>
+        <button type="button" class="wybierzStudent">Wybierz</button>
+      </div>
+    `;
+
+    studentEl.querySelector(".s-id").textContent = `ID: ${id}`;
+    studentEl.querySelector(".s-name").textContent = `Imię: ${name}`;
+    studentEl.querySelector(".s-role").textContent = `Rola: ${role}`;
+    studentEl.querySelector(".s-grades").textContent = `Oceny: ${grades}`;
+
+    students.appendChild(studentEl);
   });
 };
 
