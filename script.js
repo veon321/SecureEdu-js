@@ -118,6 +118,8 @@ const student = () => {
   const students = document.getElementById("students");
   const studenci = users.filter((user) => user.role === "student");
 
+  students.innerHTML = "";
+
   studenci.forEach(({ id, name, role, grades }) => {
     const studentEl = document.createElement("div");
     studentEl.innerHTML = `
