@@ -124,7 +124,9 @@ const student = () => {
   });
 };
 
-const guest = () => console.log("guest");
+const guest = () => {
+  console.log("guest");
+};
 
 const roleRegistry = { admin, teacher, student, guest };
 
