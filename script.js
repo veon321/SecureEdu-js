@@ -123,12 +123,12 @@ const student = () => {
   studenci.forEach(({ id, name, role, grades }) => {
     const studentEl = document.createElement("div");
     studentEl.innerHTML = `
-      <div class="student-info">
+      <div class="student-info" data-id="${id}">
         <p class="s-id"></p>
         <p class="s-name"></p>
         <p class="s-role"></p>
         <p class="s-grades"></p>
-        <button type="button" class="wybierzStudent">Wybierz</button>
+        <button type="button" class="wybierzStudent" id="wybierzStudent" >Wybierz</button>
       </div>
     `;
     studentEl.querySelector(".s-id").textContent = `ID: ${id}`;
@@ -137,6 +137,16 @@ const student = () => {
     studentEl.querySelector(".s-grades").textContent = `Oceny: ${grades}`;
 
     students.appendChild(studentEl);
+  });
+
+  const studentInfo = document.getElementById("student-info");
+  const buttonWybierz = document.querySelectorAll(".wybierzStudent");
+
+  buttonWybierz.forEach((wybierz) => {
+    wybierz.addEventListener("click", (event) => {
+      const okienko = event.target.parentElement;
+      console.log(okienko.dataset.id);
+    });
   });
 };
 
