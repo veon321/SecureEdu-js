@@ -19,13 +19,56 @@ const populateRoleOptions = (selectEl, selectedRole = null) => {
   });
 };
 
+const renderSelectStep = (containerEl, contentEl, role, onSelected) => {
+  const selectedUsers = users.filter((user) => user.role === role);
+
+  containerEl.classList.remove("hidden");
+  containerEl.innerHTML = "";
+  contentEl.classList.add("hidden");
+
+  selectedUsers.forEach(({ id, name, role: userRole }) => {
+    const el = document.createElement("div");
+    el.classList.add("select-card");
+    el.dataset.id = `${id}`;
+    el.innerHTML = `
+      <p>ID: ${id}</p>
+      <p>Name: ${name}</p>
+      <p>Role: ${userRole}</p>
+      <button type="button" class="selectUser">Select</button>
+    `;
+    containerEl.appendChild(el);
+  });
+
+  const selectButtons = containerEl.querySelectorAll(".selectUser");
+  selectButtons.forEach((select) => {
+    select.addEventListener("click", (event) => {
+      const card = event.target.closest(".select-card");
+      const id = Number(card.dataset.id);
+
+      containerEl.classList.add("hidden");
+      contentEl.classList.remove("hidden");
+
+      if (onSelected) onSelected(id);
+    });
+  });
+};
+
 const admin = () => {
+  const adminSelect = document.getElementById("admin-select");
+  const adminContent = document.getElementById("admin-content");
+
+  renderSelectStep(adminSelect, adminContent, "admin", () => {
+    renderAdminContent();
+  });
+};
+
+const renderAdminContent = () => {
   const listUser = document.getElementById("user-list");
   listUser.replaceChildren();
 
   users.forEach(({ id, name, role, grades }) => {
     const gradesDisplay =
-      Array.isArray(grades) && grades.length > 0 ? grades.join(", ") : "Brak";
+      Array.isArray(grades) && grades.length > 0 ? grades.join(", ") : "None";
 
     const divUser = document.createElement("div");
     divUser.classList.add("user-card");
@@ -43,9 +86,10 @@ const admin = () => {
     `);
 
     divUser.querySelector(".u-id").textContent = `ID: ${id}`;
-    divUser.querySelector(".u-name").textContent = `Imię: ${name}`;
-    divUser.querySelector(".u-role").textContent = `Rola: ${role}`;
-    divUser.querySelector(".u-grades").textContent = `Oceny: ${gradesDisplay}`;
+    divUser.querySelector(".u-name").textContent = `Name: ${name}`;
+    divUser.querySelector(".u-role").textContent = `Role: ${role}`;
+    divUser.querySelector(".u-grades").textContent =
+      role === "student" ? `Grades: ${gradesDisplay}` : "";
 
     listUser.appendChild(divUser);
   });
@@ -64,66 +108,74 @@ const admin = () => {
 };
 
 const teacher = () => {
-  const uczniowie = users.filter((user) => user.role === "student");
+  const teacherSelect = document.getElementById("teacher-select");
+  const teacherContent = document.getElementById("teacher-content");
 
-  const uczniowieDiv = document.getElementById("uczniowie");
-  const panelTeacher = document.getElementById("teacher-panel");
-  const wyborUcznia = document.getElementById("uczenSelect");
-  const wyborOceny = document.getElementById("ocena");
+  renderSelectStep(teacherSelect, teacherContent, "teacher", () => {
+    renderTeacherContent();
+  });
+};
 
-  uczniowieDiv.innerHTML = "";
-  wyborUcznia.innerHTML = "";
+const renderTeacherContent = () => {
+  const students = users.filter((user) => user.role === "student");
 
-  uczniowieDiv.classList.add("uczniowieDiv");
-  panelTeacher.classList.remove("hidden");
+  const studentsDiv = document.getElementById("students-list");
+  const studentSelect = document.getElementById("studentSelect");
+  const gradeSelect = document.getElementById("grade");
 
-  uczniowie.forEach((uczen) => {
-    const uczenDiv = document.createElement("div");
-    uczenDiv.classList.add("uczen");
-    uczenDiv.innerHTML = `
-      ID: ${uczen.id} | Imię: ${uczen.name} | Rola: ${uczen.role} | Oceny: ${uczen.grades}
+  studentsDiv.innerHTML = "";
+  studentSelect.innerHTML = "";
+
+  studentsDiv.classList.add("studentsDiv");
+
+  students.forEach((student) => {
+    const studentDiv = document.createElement("div");
+    studentDiv.classList.add("student-row");
+    studentDiv.innerHTML = `
+      ID: ${student.id} | Name: ${student.name} | Role: ${student.role} | Grades: ${student.grades}
     `;
-    uczniowieDiv.appendChild(uczenDiv);
+    studentsDiv.appendChild(studentDiv);
 
-    const opcja = document.createElement("option");
-    opcja.text = uczen.name;
-    wyborUcznia.appendChild(opcja);
+    const option = document.createElement("option");
+    option.text = student.name;
+    studentSelect.appendChild(option);
   });
 
-  if (wyborOceny.options.length === 0) {
-    const ocenyDoWyboru = [1, 2, 3, 4, 5, 6];
-    ocenyDoWyboru.forEach((ocena) => {
-      const opcja = document.createElement("option");
-      opcja.text = ocena;
-      wyborOceny.appendChild(opcja);
+  if (gradeSelect.options.length === 0) {
+    const gradesToChoose = [1, 2, 3, 4, 5, 6];
+    gradesToChoose.forEach((grade) => {
+      const option = document.createElement("option");
+      option.text = grade;
+      gradeSelect.appendChild(option);
     });
   }
 };
 
-const buttonDodajOcene = document.getElementById("dodaj");
+const addGradeButton = document.getElementById("add");
 
-buttonDodajOcene.addEventListener("click", () => {
-  const wyborOceny = document.getElementById("ocena");
-  const wyborUcznia = document.getElementById("uczenSelect");
-  const wybranaOpcja = wyborUcznia.options[wyborUcznia.selectedIndex].text;
+addGradeButton.addEventListener("click", () => {
+  const gradeSelect = document.getElementById("grade");
+  const studentSelect = document.getElementById("studentSelect");
+  const selectedOption =
+    studentSelect.options[studentSelect.selectedIndex].text;
 
-  const user = users.find((u) => u.name === wybranaOpcja);
-  if (user && wyborOceny.value) {
-    user.grades.push(wyborOceny.value);
-    teacher();
+  const user = users.find((u) => u.name === selectedOption);
+  if (user && gradeSelect.value) {
+    user.grades.push(gradeSelect.value);
+    renderTeacherContent();
   }
 });
 
 const student = () => {
   const students = document.getElementById("students");
-  const daneStudenta = document.getElementById("student-details");
-  const studenci = users.filter((user) => user.role === "student");
+  const studentDetails = document.getElementById("student-details");
+  const studentsList = users.filter((user) => user.role === "student");
 
   students.classList.remove("hidden");
   students.innerHTML = "";
-  daneStudenta.innerHTML = "";
+  studentDetails.innerHTML = "";
 
-  studenci.forEach(({ id, name, role, grades }) => {
+  studentsList.forEach(({ id, name, role, grades }) => {
     const studentEl = document.createElement("div");
     studentEl.innerHTML = `
       <div class="student-info" data-id="${id}">
@@ -131,31 +183,30 @@ const student = () => {
         <p class="s-name"></p>
         <p class="s-role"></p>
         <p class="s-grades"></p>
-        <button type="button" class="wybierzStudent">Wybierz</button>
+        <button type="button" class="selectStudent">Select</button>
       </div>
     `;
     studentEl.querySelector(".s-id").textContent = `ID: ${id}`;
-    studentEl.querySelector(".s-name").textContent = `Imię: ${name}`;
-    studentEl.querySelector(".s-role").textContent = `Rola: ${role}`;
-    studentEl.querySelector(".s-grades").textContent = `Oceny: ${grades}`;
+    studentEl.querySelector(".s-name").textContent = `Name: ${name}`;
+    studentEl.querySelector(".s-role").textContent = `Role: ${role}`;
 
     students.appendChild(studentEl);
   });
 
-  const buttonWybierz = students.querySelectorAll(".wybierzStudent");
+  const selectButtons = students.querySelectorAll(".selectStudent");
 
-  buttonWybierz.forEach((wybierz) => {
-    wybierz.addEventListener("click", (event) => {
-      const okienko = event.target.parentElement;
-      const id = okienko.dataset.id;
-      const iduser = users.findIndex((user) => user.id == id);
+  selectButtons.forEach((select) => {
+    select.addEventListener("click", (event) => {
+      const box = event.target.parentElement;
+      const id = box.dataset.id;
+      const userIndex = users.findIndex((user) => user.id == id);
 
       students.classList.add("hidden");
 
-      daneStudenta.innerHTML = `
-        <p>Witaj ${users[iduser].name}</p>
+      studentDetails.innerHTML = `
+        <p>Welcome ${users[userIndex].name}</p>
 
-        <p>Twoje oceny: ${users[iduser].grades}
+        <p>Your grades: ${users[userIndex].grades}
       `;
     });
   });
@@ -182,7 +233,7 @@ const showPanel = function (event) {
   if (runRoleMechanics) {
     runRoleMechanics();
   } else {
-    console.error(`Nie znaleziono mechanik dla roli: ${userRole}`);
+    console.error(`No mechanics found for role: ${userRole}`);
   }
 };
 
@@ -192,7 +243,7 @@ const addUser = function () {
   const role = document.getElementById("user-role").value;
 
   if (username === "") {
-    alert("Wprowadź nazwę użytkownika!");
+    alert("Enter a username!");
     return;
   }
 
@@ -202,7 +253,7 @@ const addUser = function () {
   users.push({ id: newId, name: username, role, grades: [] });
   usernameInput.value = "";
 
-  admin();
+  renderAdminContent();
 };
 
 const removeUser = function (event) {
@@ -215,7 +266,7 @@ const removeUser = function (event) {
     users.splice(userIndex, 1);
   }
 
-  admin();
+  renderAdminContent();
 };
 
 const editUser = function (event) {
@@ -235,10 +286,10 @@ const editUser = function (event) {
   );
 
   editDiv.setHTMLUnsafe(`
-    Panel edycji
-    <label>Nazwa użytkownika: <input type="text" class="name-edit" id="name-edit" value="" /></label>
-    <label>Oceny: <input type="text" class="grade-edit" id="grade-edit" value="" /></label>
-    <label>Rola: <select class="role-edit" id="role-edit"></select></label>
+    Edit panel
+    <label>Username: <input type="text" class="name-edit" id="name-edit" value="" /></label>
+    <label>Grades: <input type="text" class="grade-edit" id="grade-edit" value="" /></label>
+    <label>Role: <select class="role-edit" id="role-edit"></select></label>
     <button type="button" id="edit-apply" class="edit-apply">Apply</button>
     <p class="error hidden" id="error"></p>
   `);
@@ -271,7 +322,7 @@ const editUser = function (event) {
 
     if (nameField.value.trim() === "") {
       const error = editDiv.querySelector("#error");
-      error.textContent = "Wprowadź wszystkie wartości!";
+      error.textContent = "Enter all values!";
       error.classList.remove("hidden");
       return;
     }
@@ -289,7 +340,7 @@ const editUser = function (event) {
     users[userIndex].role = newRole;
     users[userIndex].grades = newGradesArray;
 
-    admin();
+    renderAdminContent();
   });
 };
 
@@ -299,17 +350,17 @@ startButtons.forEach((button) => {
 
 addUserButton.addEventListener("click", addUser);
 
-const powrotButton = document.querySelectorAll(".powrot");
+const backButton = document.querySelectorAll(".back");
 
-const glowna = () => {
-  const panele = document.querySelectorAll(".panel");
-  panele.forEach((panel) => {
+const home = () => {
+  const panels = document.querySelectorAll(".panel");
+  panels.forEach((panel) => {
     panel.classList.add("hidden");
   });
   const menuContainer = document.getElementById("menu-container");
   menuContainer.classList.remove("hidden");
 };
 
-powrotButton.forEach((powrot) => {
-  powrot.addEventListener("click", glowna);
+backButton.forEach((back) => {
+  back.addEventListener("click", home);
 });

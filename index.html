@@ -13,44 +13,54 @@
       <div class="user student" data-role="student">Student</div>
       <div class="user guest" data-role="guest">Guest</div>
     </div>
+
     <div class="panel admin hidden" id="admin-panel">
-      <div class="user-list" id="user-list"></div>
-      <div class="add-user-panel" id="add-user-panel">
-        Dodaj użytkownika
-        <label
-          >Nazwa użytkownika: <input type="text" class="name" id="name" />
-        </label>
-        <div class="select-role">
-          <span>Wybierz rolę:</span>
-          <select class="role" id="user-role"></select>
+      <div class="admin-select" id="admin-select"></div>
+
+      <div class="admin-content hidden" id="admin-content">
+        <div class="user-list" id="user-list"></div>
+        <div class="add-user-panel" id="add-user-panel">
+          Add user
+          <label>Username: <input type="text" class="name" id="name" /> </label>
+          <div class="select-role">
+            <span>Select role:</span>
+            <select class="role" id="user-role"></select>
+          </div>
+          <button type="button" id="addUser-button" class="addUser-button">
+            Add User
+          </button>
         </div>
-        <button type="button" id="addUser-button" class="addUser-button">
-          Add User
-        </button>
       </div>
-      <button type="button" class="powrot" id="powrot">Powrót</button>
+
+      <button type="button" class="back" id="back">Back</button>
     </div>
+
     <div class="panel teacher hidden" id="teacher-panel">
-      <div class="uczniowiePanel">
-        <div class="" id="uczniowie"></div>
-        <div class="dodajOcene">
-          Dodaj ocene
+      <div class="teacher-select" id="teacher-select"></div>
+
+      <div class="studentsPanel hidden" id="teacher-content">
+        <div class="" id="students-list"></div>
+        <div class="addGrade">
+          Add grade
           <label
-            >Uczen:<select class="uczenSelect" id="uczenSelect"></select
+            >Student:<select class="studentSelect" id="studentSelect"></select
           ></label>
-          <label>Ocena:<select class="ocena" id="ocena"></select></label>
-          <button type="button" class="dodaj" id="dodaj">Dodaj ocene</button>
+          <label>Grade:<select class="grade" id="grade"></select></label>
+          <button type="button" class="add" id="add">Add grade</button>
         </div>
       </div>
-      <button type="button" class="powrot" id="powrot">Powrót</button>
+
+      <button type="button" class="back" id="back">Back</button>
     </div>
+
     <div class="panel student hidden" id="student-panel">
       <div class="students" id="students"></div>
       <div class="student-details" id="student-details"></div>
-      <button type="button" class="powrot" id="powrot">Powrót</button>
+      <button type="button" class="back" id="back">Back</button>
     </div>
+
     <div class="panel guest hidden" id="guest-panel">
-      <button type="button" class="powrot" id="powrot">Powrót</button>
+      <button type="button" class="back" id="back">Back</button>
     </div>
   </body>
   <script src="script.js"></script>
