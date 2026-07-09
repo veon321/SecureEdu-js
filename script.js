@@ -213,7 +213,9 @@ const student = () => {
 };
 
 const guest = () => {
-  console.log("guest panel");
+  const guestContainer = document.getElementById("guest-container");
+
+  guestContainer.innerHTML = "TODO";
 };
 
 const roleRegistry = { admin, teacher, student, guest };
