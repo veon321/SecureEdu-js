@@ -131,7 +131,6 @@ const student = () => {
         <button type="button" class="wybierzStudent">Wybierz</button>
       </div>
     `;
-
     studentEl.querySelector(".s-id").textContent = `ID: ${id}`;
     studentEl.querySelector(".s-name").textContent = `Imię: ${name}`;
     studentEl.querySelector(".s-role").textContent = `Rola: ${role}`;
@@ -142,7 +141,7 @@ const student = () => {
 };
 
 const guest = () => {
-  console.log("guest");
+  console.log("guest panel");
 };
 
 const roleRegistry = { admin, teacher, student, guest };
