@@ -4,7 +4,7 @@ A sleek, modern, and fully interactive frontend User Management application that
 
 ## Live Demo
 
-Coming soon
+https://veon321.github.io/SecureEdu-js/
 
 ## Technologies Used
 
