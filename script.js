@@ -145,7 +145,16 @@ const student = () => {
   buttonWybierz.forEach((wybierz) => {
     wybierz.addEventListener("click", (event) => {
       const okienko = event.target.parentElement;
-      console.log(okienko.dataset.id);
+      const id = okienko.dataset.id;
+      const iduser = users.findIndex((user) => {
+        return user.id == id;
+      });
+      students.classList.add("hidden");
+      const daneStudenta = document.createElement("div");
+      daneStudenta.innerHTML = `
+        <p>Witaj  ${users[iduser].name} </p>
+      `;
+      students.parentElement.appendChild(daneStudenta);
     });
   });
 };
