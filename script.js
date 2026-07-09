@@ -116,9 +116,12 @@ buttonDodajOcene.addEventListener("click", () => {
 
 const student = () => {
   const students = document.getElementById("students");
+  const daneStudenta = document.getElementById("student-details");
   const studenci = users.filter((user) => user.role === "student");
 
+  students.classList.remove("hidden");
   students.innerHTML = "";
+  daneStudenta.innerHTML = "";
 
   studenci.forEach(({ id, name, role, grades }) => {
     const studentEl = document.createElement("div");
@@ -128,7 +131,7 @@ const student = () => {
         <p class="s-name"></p>
         <p class="s-role"></p>
         <p class="s-grades"></p>
-        <button type="button" class="wybierzStudent" id="wybierzStudent" >Wybierz</button>
+        <button type="button" class="wybierzStudent">Wybierz</button>
       </div>
     `;
     studentEl.querySelector(".s-id").textContent = `ID: ${id}`;
@@ -139,22 +142,21 @@ const student = () => {
     students.appendChild(studentEl);
   });
 
-  const studentInfo = document.getElementById("student-info");
-  const buttonWybierz = document.querySelectorAll(".wybierzStudent");
+  const buttonWybierz = students.querySelectorAll(".wybierzStudent");
 
   buttonWybierz.forEach((wybierz) => {
     wybierz.addEventListener("click", (event) => {
       const okienko = event.target.parentElement;
       const id = okienko.dataset.id;
-      const iduser = users.findIndex((user) => {
-        return user.id == id;
-      });
+      const iduser = users.findIndex((user) => user.id == id);
+
       students.classList.add("hidden");
-      const daneStudenta = document.createElement("div");
+
       daneStudenta.innerHTML = `
-        <p>Witaj  ${users[iduser].name} </p>
+        <p>Witaj ${users[iduser].name}</p>
+
+        <p>Twoje oceny: ${users[iduser].grades}
       `;
-      students.parentElement.appendChild(daneStudenta);
     });
   });
 };
